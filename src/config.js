@@ -11,7 +11,7 @@ export default {
     regexes: {
         help: /^help((?:\s+in)?\s+regex(es)?)?$/im,
         unset: /^(.+?)\s+no\s+more(\s+(in\s+(.+?)|personally|here))?(\s+to\s+(.+))?$/im,
-        set: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+to\s+(.+)\s+((at|this|today|tomorrow|next)\s+(.+?)|in\s+(.+?)|every\s+(.+?)\s+(from\s+(.+?)\s+)?(to|until)\s+(.+?))$/im,
+        set: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+to\s+(.+)\s+((at|this|today|tomorrow|next)\s+(.+?)|in\s+(.+?)|every\s+(.+?)\s+(from\s+(.+?)\s+)?(to|until)\s+(.+?))((\.|!)+)?$/im,
         remind: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+to\s+(.+)$/im,
         open: /^open(\s+here)?$/
     },
