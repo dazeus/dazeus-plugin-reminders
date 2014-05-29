@@ -1,0 +1,29 @@
+{
+  "name": "dazeus-plugin-reminders",
+  "version": "0.0.1",
+  "description": "DaZeus plugin for creating reminders.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dazeus/dazeus-plugin-reminders.git"
+  },
+  "keywords": [
+    "dazeus",
+    "reminders"
+  ],
+  "author": "Ruben Nijveld <ruben@gewooniets.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dazeus/dazeus-plugin-reminders/issues"
+  },
+  "homepage": "https://github.com/dazeus/dazeus-plugin-reminders",
+  "dependencies": {
+    "dazeus": "0.6.0",
+    "moment": "2.6.0",
+    "sugar": "1.4.1",
+    "traceur": "0.0.42"
+  }
+}
