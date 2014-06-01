@@ -7,7 +7,7 @@ export var fix = function (cmd, requester, channel, is_query) {
     if (cmd.command === 'set' || cmd.command === 'remind' || cmd.command === 'unset') {
 
         // replace me with the requester name
-        if (cmd.for === 'me') {
+        if (cmd.for === config.messages.me) {
             cmd.for = requester;
         }
 
@@ -166,39 +166,6 @@ export var is_bot_in_channel = function (client, network, channel, callback) {
     });
 };
 
-// alternatives and token names allowed
-var token_names = {
-    s: 'second',
-    sec: 'second',
-    secs: 'second',
-    second: 'second',
-    seconds: 'second',
-    min: 'minute',
-    mins: 'minute',
-    minute: 'minute',
-    minutes: 'minutes',
-    h: 'hour',
-    hr: 'hour',
-    hour: 'hour',
-    hours: 'hour',
-    d: 'day',
-    dy: 'day',
-    day: 'day',
-    days: 'day',
-    w: 'week',
-    wk: 'week',
-    week: 'week',
-    weeks: 'week',
-    mon: 'month',
-    month: 'month',
-    months: 'month',
-    y: 'year',
-    yr: 'year',
-    yrs: 'year',
-    year: 'year',
-    years: 'year'
-};
-
 // return -1 if it is not a valid integer in {0, 1, 2, ...}, or the integer otherwise
 var get_valid_nat_num = function (str) {
     var n = ~~Number(str);
@@ -218,19 +185,19 @@ var split_named_part = function (str, disallow_number = false) {
         } else if (match = /(\+?(\d+))([a-z]+)$/.exec(str)) {
             var num, unit;
             [num, unit] = [parseInt(match[2], 10), match[3]];
-            if (undefined === token_names[unit]) {
+            if (undefined === config.time_token_names[unit]) {
                 return [null, null];
             } else {
-                return [num, token_names[unit]];
+                return [num, config.time_token_names[unit]];
             }
         } else {
             return [null, null];
         }
     } else {
-        if (undefined === token_names[str]) {
+        if (undefined === config.time_token_names[str]) {
             return [null, null];
         } else {
-            return [1, token_names[str]];
+            return [1, config.time_token_names[str]];
         }
     }
 };

@@ -35,7 +35,7 @@ export var help = function (cmd, reply) {
         reply(config.messages.sending_help_regex);
         for (var regex of Object.keys(config.regexes)) {
             var r = config.regexes[regex].toString();
-            reply(regex[0].toUpperCase() + regex.slice(1) + ' matched by ' + r, true);
+            reply(regex[0].toUpperCase() + regex.slice(1) + ' ' + config.messages.matched_by + ' ' + r, true);
         }
     } else {
         reply(config.messages.sending_help);
@@ -67,8 +67,14 @@ export var set = function (client, cmd, reply, add_timer) {
             dates = cmd.time.map((d) => d.relative()).join(', ');
         }
 
+        var who = cmd.for;
+        if (cmd.for === cmd.by) {
+            who = config.messages.you;
+        }
+
         reply(config.messages.reminder_set.assign({
-            dates: dates
+            dates: dates,
+            who: who
         }));
     };
 

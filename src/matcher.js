@@ -12,7 +12,7 @@ export default function (command) {
             command: 'unset',
             for: result[1],
             channel: result[4],
-            private: result[3] === 'personally',
+            private: result[3] === config.messages.personally,
             message: result[6]
         };
     } else if (result = config.regexes.set.exec(command)) {
@@ -37,7 +37,7 @@ export default function (command) {
             command: 'set',
             message: result[5],
             for: result[1],
-            private: result[3] === 'personally',
+            private: result[3] === config.messages.personally,
             channel: result[4],
             time: time
         };
@@ -46,7 +46,7 @@ export default function (command) {
             command: 'remind',
             message: result[5],
             for: result[1],
-            private: result[3] === 'personally',
+            private: result[3] === config.messages.personally,
             channel: result[4]
         };
     } else if (result = config.regexes.open.exec(command)) {
