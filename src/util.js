@@ -99,6 +99,9 @@ var resolve_set_time = function (cmd) {
                     }
                     slots.push(current);
                     current = Date.create(current).addSeconds(cmd.time.every);
+                    if (slots.length > config.max_number_of_repeats) {
+                        break;
+                    }
                 }
 
                 if (slots.length > config.max_number_of_repeats) {
