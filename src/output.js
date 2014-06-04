@@ -1,6 +1,8 @@
 import "sugar";
 import config from "./config";
 module util from "./util";
+module moment from "moment";
+module _ from "lodash";
 
 // create a responder for error messages and response messages
 export var responder_for = function (client, network, channel, user, execCmd) {
@@ -60,14 +62,21 @@ export var set = function (client, cmd, reply, add_timer) {
             add_timer(timer);
         }
 
+        var first = moment(cmd.time[0]).fromNow() + ' (' + moment(cmd.time[0]).calendar() + ')';
         var dates;
         if (cmd.time.length > 3) {
-            dates = cmd.time.slice(0, 2).map((d) => d.relative()).join(', ') + ', ..., ' + cmd.time[cmd.time.length - 1].relative();
+            dates = moment(cmd.time[1]).fromNow() + ', ..., ' + moment(cmd.time[cmd.time.length - 1]).fromNow();
         } else {
-            dates = cmd.time.map((d) => d.relative()).join(', ');
+            dates = cmd.time.slice(1).map((d) => moment(d).fromNow()).join(', ');
         }
 
-        var who = cmd.for;
+        if (dates.length > 0) {
+            dates = [first, dates].join(', ');
+        } else {
+            dates = first;
+        }
+
+        var who = util.nohl(cmd.for);
         if (cmd.for === cmd.by) {
             who = config.messages.you;
         }
@@ -105,4 +114,43 @@ export var open = function (cmd, reply, timers) {
         filter = (t) => t.in[0] === cmd.network;
     }
     reply(config.messages.reminders_open.assign({count: timers.filter(filter).length}));
+};
+
+var create_timer_message = function (timer) {
+    var channel;
+    if (util.is_valid_channel_name(timer.in[1])) {
+        channel = config.messages.in_where.assign({in: timer.in[1]});
+    } else {
+        channel = config.message.personally;
+    }
+    return config.messages.timer_info.assign({
+        message: timer.message,
+        who: timer.for,
+        channel: channel,
+        time: moment(timer.date).format('LLLL')
+    });
+};
+
+export var debug = function (cmd, reply, timers, remove_timer) {
+    var filtered = timers.filter((timer) => {
+        return (cmd.for_channel === undefined || cmd.for_channel === timer.in[1]) &&
+            (cmd.for_user === undefined || cmd.for_user === timer.for) &&
+            cmd.network === timer.in[0];
+    });
+
+    if (cmd.remove !== undefined) {
+        var to_remove = filtered[cmd.remove];
+        reply("" + cmd.remove + " => " + create_timer_message(to_remove), true);
+        if (cmd.confirm) {
+            remove_timer(to_remove);
+            reply(config.messages.removed);
+        } else {
+            reply(config.messages.add_confirm_to_remove);
+        }
+    } else {
+        reply(config.messages.timers_found.assign({count: filtered.length}), true);
+        for (var idx = 0; idx < filtered.length; idx += 1) {
+            reply("" + idx + " => " + create_timer_message(filtered[idx]), true);
+        }
+    }
 };

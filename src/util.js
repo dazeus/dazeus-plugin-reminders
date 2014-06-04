@@ -1,6 +1,7 @@
 import "sugar";
 import config from "./config";
 module moment from "moment";
+import _ from "lodash";
 
 // clean up the matched content from the command
 export var fix = function (cmd, requester, channel, is_query) {
@@ -47,6 +48,9 @@ export var fix = function (cmd, requester, channel, is_query) {
 
     // let's resolve time
     if (cmd.command === 'set') {
+        if (cmd.message[0] === '"' && cmd.message[cmd.message.length - 1] === '"') {
+            cmd.message = cmd.message.substring(1, cmd.message.length - 2).replace('\\"', '"');
+        }
         cmd = resolve_set_time(cmd);
     }
     return cmd;
@@ -108,6 +112,8 @@ var resolve_set_time = function (cmd) {
                     cmd.error = config.messages.too_many_repeates.assign({
                         repeats: config.max_number_of_repeats
                     });
+                } else if (slots.length === 0) {
+                    cmd.error = config.messages.no_repeats;
                 } else {
                     cmd.time = slots;
                 }
@@ -260,3 +266,28 @@ export var str_to_date = function (str) {
 export var escape_reg_exp = function (str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
+
+export var matching_timers = function (timers, conditions) {
+    checks += 1;
+    if (data.message === undefined || data.message === timer.message) {
+        matches += 1;
+    }
+
+    checks += 1;
+    if (data.for === timer.for) {
+        matches += 1;
+    }
+
+    checks += 1;
+    if (data.network === timer.in[0] && data.channel === timer.in[1]) {
+        matches += 1;
+    }
+};
+
+// add anti-highlight character to string
+export var nohl = function (str) {
+    if (str.length < 1) {
+        return str;
+    }
+    return str[0] + config.no_highlight_char + str.slice(1);
+};

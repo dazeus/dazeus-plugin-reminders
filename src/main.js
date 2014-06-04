@@ -3,6 +3,7 @@ module dazeus from "dazeus";
 module util from "./util";
 import matcher from "./matcher";
 module output from "./output";
+module moment from "moment";
 import {strings_to_dates, timers_for_stringify} from "./store";
 import "sugar";
 
@@ -45,8 +46,8 @@ var client = dazeus.connect(options, () => {
             var vars = {
                 for: timer.for,
                 message: timer.message,
-                by: timer.by,
-                created: timer.created.relative()
+                by: util.nohl(timer.by),
+                created: moment(timer.created).fromNow()
             };
             if (timer.private) {
                 msg = config.messages.output_without_for.assign(vars);
@@ -128,6 +129,11 @@ var client = dazeus.connect(options, () => {
                     } else if (command.command === 'open') {
                         command.channel = channel;
                         output.open(command, responder, timers);
+                    } else if (command.command === 'debug') {
+                        command.network = network;
+                        command.channel = channel;
+                        command.user = user;
+                        output.debug(command, responder, timers, removeTimer);
                     } else {
                         responder(config.messages.unknown_error);
                     }

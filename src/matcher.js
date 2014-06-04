@@ -49,10 +49,19 @@ export default function (command) {
             private: result[3] === config.messages.personally,
             channel: result[4]
         };
+    // list number of open reminders
     } else if (result = config.regexes.open.exec(command)) {
         return {
             command: 'open',
             channel_only: result[1] !== undefined
+        };
+    } else if (result = config.regexes.debug.exec(command)) {
+        return {
+            command: 'debug',
+            for_channel: result[3],
+            for_user: result[5],
+            remove: result[7] === undefined ? undefined : parseInt(result[7], 10),
+            confirm: result[8] !== undefined
         };
     } else {
         return {

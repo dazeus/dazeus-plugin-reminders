@@ -1,3 +1,23 @@
+module moment from "moment";
+
+moment.lang('en', {
+    longDateFormat: {
+        LT: 'HH:mm',
+        L: 'YYYY-MM-DD',
+        LL : "D MMMM YYYY",
+        LLL : "D MMMM YYYY LT",
+        LLLL : "dddd D MMMM YYYY LT"
+    },
+    calendar : {
+        lastDay : '[yesterday at] LT',
+        sameDay : '[today at] LT',
+        nextDay : '[tomorrow at] LT',
+        lastWeek : '[last] dddd [at] LT',
+        nextWeek : 'dddd [at] LT',
+        sameElse : 'L'
+    }
+});
+
 export default {
     commands: [
         'remind'
@@ -11,9 +31,10 @@ export default {
     regexes: {
         help: /^help((?:\s+in)?\s+regex(es)?)?$/im,
         unset: /^(.+?)\s+no\s+more(\s+(in\s+(.+?)|personally|here))?(\s+(?:to|about)\s+(.+))?$/im,
-        set: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+(?:to|about)\s+(.+)\s+((at|this|today|tomorrow|next)\s+(.+?)|in\s+(.+?)|every\s+(.+?)\s+(from\s+(.+?)\s+)?(to|until)\s+(.+?))((\.|!)+)?$/im,
+        set: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+(?:to|about)\s+("[^"]+"|.+?)\s+((tomorrow\s+at|at|this|next|today\s+at)\s+(.+?)|in\s+(\d+.+?)|every\s+(.+?)\s+(from\s+(.+?)\s+)?(to|until)\s+(.+?))((\.|!)+)?$/im,
         remind: /^(.+?)(\s+(in\s+(.+?)|personally|here))?\s+(?:to|about)\s+(.+)$/im,
-        open: /^open(\s+here)?$/
+        open: /^open(\s+here)?$/,
+        debug: /^debug(\s+channel(\s+(.+?))?)?(\s+for\s+(.+?))?(\s+remove\s+(\d+)(\s+confirm)?)?$/
     },
     messages: {
         unknown_str: "Sorry, I don't quite know what you mean by '{str}'.",
@@ -31,14 +52,20 @@ export default {
         too_many_repeates: "You are only allowed to create repeated reminders with less than {repeats} repeats.",
         unknown_error: "Unknown error. Which shouldn't really happen. But it did. But did it though?",
         reminders_open: "There are {count} open reminders.",
-        reminder_set: "Alright, I will remind {who} in {dates}",
+        reminder_set: "Alright, I will remind {who} {dates}.",
         reminder_unset: "Removed {count} reminders.",
         sending_help: "Alright, sending you the help.",
         sending_help_regex: "Alright, sending you the help for haxxors.",
         you: "you",
         matched_by: "matched by",
         personally: "personally",
+        no_repeats: "Whoops, looks like this won't get you any reminders.",
         me: "me",
+        timer_info: "Send '{message}' to {who} {channel} at {time}.",
+        in_where: "in {in}",
+        timers_found: "Found {count} matching timers.",
+        removed: "Removed reminder.",
+        add_confirm_to_remove: "Add 'confirm' to your message to remove that timer.",
         help: [
             "The %% command is used to create automatic reminders. They should not be regarded as reliable in any way.",
             "To create a new reminder use `%% <who> to <message>`. This will however send the reminder right away.",
