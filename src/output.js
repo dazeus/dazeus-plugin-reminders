@@ -121,7 +121,7 @@ var create_timer_message = function (timer) {
     if (util.is_valid_channel_name(timer.in[1])) {
         channel = config.messages.in_where.assign({in: timer.in[1]});
     } else {
-        channel = config.message.personally;
+        channel = config.messages.personally;
     }
     return config.messages.timer_info.assign({
         message: timer.message,
