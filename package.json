@@ -1,6 +1,6 @@
 {
   "name": "dazeus-plugin-reminders",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "DaZeus plugin for creating reminders.",
   "main": "index.js",
   "scripts": {
